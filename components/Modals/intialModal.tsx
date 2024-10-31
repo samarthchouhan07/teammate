@@ -23,6 +23,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
+import { FileUpload } from "../file-upload";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -34,8 +35,7 @@ const formSchema = z.object({
 });
 
 export const InitialModal = () => {
-
-  const [isMounted,setIsMounted]=useState(false)
+  const [isMounted, setIsMounted] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,14 +50,14 @@ export const InitialModal = () => {
     console.log(values);
   };
 
-  useEffect(()=>{
-    setIsMounted(true)
-  })
-  
-  if(!isMounted){
-    return null
+  useEffect(() => {
+    setIsMounted(true);
+  });
+
+  if (!isMounted) {
+    return null;
   }
-  
+
   return (
     <Dialog open={true}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
@@ -74,7 +74,21 @@ export const InitialModal = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-8 px-6">
               <div className="flex items-center justify-center text-center">
-                TODO: Image Upload
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <FileUpload
+                          endpoint="serverImage"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </div>
               <FormField
                 control={form.control}
@@ -87,10 +101,10 @@ export const InitialModal = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" 
+                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
                         placeholder="Enter server name"
                         {...field}
-                     />
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,9 +112,9 @@ export const InitialModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-                <Button disabled={isLoading} variant={"primary"}>
-                    Create
-                </Button>
+              <Button disabled={isLoading} variant={"primary"}>
+                Create
+              </Button>
             </DialogFooter>
           </form>
         </Form>
