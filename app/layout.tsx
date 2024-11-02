@@ -31,7 +31,7 @@ export default function RootLayout({
             enableSystem={false}
             storageKey="teammate-theme"
           >
-            <ModalProvider />
+            <ModalProvider />   
             {children}
           </ThemeProvider>
         </body>
